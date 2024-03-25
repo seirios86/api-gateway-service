@@ -1,0 +1,94 @@
+spring:
+  application:
+    name: api-gateway-service
+    
+  profiles:
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  cloud:
+    gateway:
+      routes:
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payment/**
+        - id: token-service
+          uri: lb://TOKEN-SERVICE
+          predicates:
+            - Path=/api/v1/token/**
+        - id: approval-service
+          uri: lb://APPROVAL-SERVICE
+          predicates:
+            - Path=/api/v1/approval/**
+        - id: payment-swagger-ui
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**
+        - id: token-swagger-ui
+          uri: lb://TOKEN-SERVICE
+          predicates:
+            - Path=/token/**
+        - id: approval-swagger-ui
+          uri: lb://APPROVAL-SERVICE
+          predicates:
+            - Path=/approval/**
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+logging:
+  level:
+    root: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  cloud:
+    gateway:
+      routes:
+        - id: payment-service
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payment/**
+        - id: token-service
+          uri: lb://TOKEN-SERVICE
+          predicates:
+            - Path=/api/v1/token/**
+        - id: approval-service
+          uri: lb://APPROVAL-SERVICE
+          predicates:
+            - Path=/api/v1/approval/**
+        - id: payment-swagger-ui
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**
+        - id: token-swagger-ui
+          uri: lb://TOKEN-SERVICE
+          predicates:
+            - Path=/token/**
+        - id: approval-swagger-ui
+          uri: lb://APPROVAL-SERVICE
+          predicates:
+            - Path=/approval/**
+
+server:
+  port: 8080
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://172.18.0.2:8761/eureka/
